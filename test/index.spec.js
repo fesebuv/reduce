@@ -1,5 +1,5 @@
 var expect = require('chai').expect;
-var reduce = require('../src/reduce');
+var fbReduce = require('../src/reduce').fbReduce;
 
 var INPUT_RANGE = [0, 1, 2, 3, 4];
 
@@ -18,8 +18,9 @@ function flatten(a, b) {
 }
 
 describe('`fbReduce`', function () {
-  it('should be defined', function () {
-    expect(Array.fbReduce).to.be.defined;
+
+  before(function () {
+    Array.prototype.fbReduce = fbReduce;
   });
 
   it('should sum starting with 0', function () {
@@ -98,5 +99,20 @@ describe('`fbReduce`', function () {
       e: 'object'
     };
     expect(output).to.deep.equal(expected);
+  });
+
+  describe('when reducing an empty array', function () {
+    it('should throw when no initial value is provided', function () {
+      try {
+        [].fbReduce(sum);
+      } catch(err) {
+        expect(err).to.be.instanceof(Error);
+      }
+    });
+
+    it('when initial value is provided', function () {
+      var a = [].fbReduce(sum, 1);
+      expect(a).to.equal(1);
+    });
   });
 });
