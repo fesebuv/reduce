@@ -1,5 +1,5 @@
 var expect = require('chai').expect;
-var fbReduce = require('../src/reduce').fbReduce;
+var _reduce = require('../src/reduce')._reduce;
 
 var INPUT_RANGE = [0, 1, 2, 3, 4];
 
@@ -17,36 +17,36 @@ function flatten(a, b) {
   return a.concat(b);
 }
 
-describe('`fbReduce`', function () {
+describe('`_reduce`', function () {
 
   before(function () {
-    Array.prototype.fbReduce = fbReduce;
+    Array.prototype._reduce = _reduce;
   });
 
   it('should sum starting with 0', function () {
     var range = [].concat(INPUT_RANGE);
     var a = range.reduce(sum, 0);
-    var b = range.fbReduce(sum, 0);
+    var b = range._reduce(sum, 0);
     expect(a).to.deep.equal(b);
   });
 
   it('should sum starting with 10', function () {
     var range = [].concat(INPUT_RANGE);
     var a = range.reduce(sum, 10);
-    var b = range.fbReduce(sum, 10);
+    var b = range._reduce(sum, 10);
     expect(a).to.deep.equal(b);
   });
 
   it('should flatten a 2d array', function () {
     var a = INPUT_2D.reduce(flatten, []);
-    var b = INPUT_2D.fbReduce(flatten, []);
+    var b = INPUT_2D._reduce(flatten, []);
     expect(a).to.deep.equal(b);
   });
 
   it('should allow access to index', function () {
     var input = ['a', 'b', 'c'];
     var expected = { A: 1, B: 2, C: 3 };
-    var output = input.fbReduce(function (acc, cur, i) {
+    var output = input._reduce(function (acc, cur, i) {
       var key = cur.toUpperCase();
       acc[key] = i + 1;
       return acc;
@@ -57,7 +57,7 @@ describe('`fbReduce`', function () {
   it('should allow access to original array', function () {
     var input = ['a', 'b', 'c'];
     var expected = { a: '1 of 3', b: '2 of 3', c: '3 of 3' };
-    var output = input.fbReduce(function (acc, cur, i, arr) {
+    var output = input._reduce(function (acc, cur, i, arr) {
       acc[cur] = '' + (i + 1) + ' of ' + arr.length;
       return acc;
     }, {});
@@ -67,7 +67,7 @@ describe('`fbReduce`', function () {
   it('should allow me to mutate the input array', function () {
     var input = ['a', 'b', 'c'];
     var expected = ['a', 'b', 'c'];
-    var output = input.fbReduce(function (acc, cur, i, arr) {
+    var output = input._reduce(function (acc, cur, i, arr) {
       if (i === 0) {
         arr.push('d');
       }
@@ -85,7 +85,7 @@ describe('`fbReduce`', function () {
       e: [],
       f: null
     };
-    var output = Object.keys(foo).fbReduce(function (acc, cur) {
+    var output = Object.keys(foo)._reduce(function (acc, cur) {
       if (!foo[cur]) {
         return acc;
       }
@@ -102,16 +102,16 @@ describe('`fbReduce`', function () {
   });
 
   describe('when reducing an empty array', function () {
-    it('should throw when no initial value is provided', function () {
+    it('should throw error when no initial value is provided', function () {
       try {
-        [].fbReduce(sum);
+        []._reduce(sum);
       } catch(err) {
         expect(err).to.be.instanceof(Error);
       }
     });
 
     it('when initial value is provided', function () {
-      var a = [].fbReduce(sum, 1);
+      var a = []._reduce(sum, 1);
       expect(a).to.equal(1);
     });
   });

@@ -1,6 +1,6 @@
 'use strict';
 
-var fbReduce = function (callback, initialValue) {
+var _reduce = function (callback, initialValue) {
   var arr = this;
   var len = arr.length;
   var hasInitialValue = initialValue !== undefined;
@@ -23,5 +23,5 @@ var fbReduce = function (callback, initialValue) {
 }
 
 module.exports = {
-  fbReduce: fbReduce
+  _reduce: _reduce
 };

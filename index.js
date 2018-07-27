@@ -1,7 +1,7 @@
 'use strict';
 
-var fbReduce = require('./src/reduce');
+var _reduce = require('./src/reduce')._reduce;
 
 if (!Array.prototype.reduce) {
-  Array.prototype.reduce = fbReduce;
+  Array.prototype.reduce = _reduce;
 }
